@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Tarispace</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="css/line-awesome.css">
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <div class="admin-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-wrapper">
+                    <img src="img/logo/tarispace-logo.svg" alt="Tarispace" class="admin-logo">
+                </div>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="las la-times"></i>
+                </button>
+            </div>
+
+            <div class="admin-profile">
+                <div class="admin-avatar">
+                    <img src="img/tari about image.png" alt="Admin">
+                    <span class="status-dot"></span>
+                </div>
+                <div class="admin-info">
+                    <h4>Tari Pereowei</h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-section-title">Main</span>
+                    <ul>
+                        <li>
+                            <a href="#" class="nav-link active" data-section="dashboard">
+                                <i class="las la-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="visitors">
+                                <i class="las la-users"></i>
+                                <span>Visitors</span>
+                                <span class="nav-badge" id="visitorBadge">0</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="messages">
+                                <i class="las la-envelope"></i>
+                                <span>Messages</span>
+                                <span class="nav-badge" id="messageBadge">0</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Content Management</span>
+                    <ul>
+                        <li>
+                            <a href="#" class="nav-link" data-section="hero">
+                                <i class="las la-home"></i>
+                                <span>Hero Section</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="about">
+                                <i class="las la-user-circle"></i>
+                                <span>About Me</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="services">
+                                <i class="las la-concierge-bell"></i>
+                                <span>Services</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="portfolio">
+                                <i class="las la-briefcase"></i>
+                                <span>Portfolio</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="blog">
+                                <i class="las la-blog"></i>
+                                <span>Blog</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="skills">
+                                <i class="las la-chart-bar"></i>
+                                <span>Skills</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <span class="nav-section-title">Settings</span>
+                    <ul>
+                        <li>
+                            <a href="#" class="nav-link" data-section="contact-info">
+                                <i class="las la-address-card"></i>
+                                <span>Contact Info</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="social-links">
+                                <i class="las la-share-alt"></i>
+                                <span>Social Links</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link" data-section="settings">
+                                <i class="las la-cog"></i>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="index.html" class="view-site-btn" target="_blank">
+                    <i class="las la-external-link-alt"></i>
+                    <span>View Site</span>
+                </a>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="las la-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="las la-bars"></i>
+                    </button>
+                    <div class="page-info">
+                        <h1 id="pageTitle">Dashboard</h1>
+                        <p class="breadcrumb">Admin / <span id="pageBreadcrumb">Dashboard</span></p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-search">
+                        <i class="las la-search"></i>
+                        <input type="text" placeholder="Search..." id="globalSearch">
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn notification-btn" id="notificationBtn">
+                            <i class="las la-bell"></i>
+                            <span class="notification-count" id="notificationCount">0</span>
+                        </button>
+                        <div class="header-profile">
+                            <img src="img/tari about image.png" alt="Admin">
+                            <div class="profile-dropdown" id="profileDropdown">
+                                <a href="#" data-section="settings"><i class="las la-cog"></i> Settings</a>
+                                <a href="#" id="headerLogout"><i class="las la-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                
+                <!-- ==================== DASHBOARD SECTION ==================== -->
+                <section id="dashboard-section" class="section active">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon visitors">
+                                <i class="las la-eye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalVisitors">0</h3>
+                                <p>Total Visitors</p>
+                                <span class="stat-change positive">
+                                    <i class="las la-arrow-up"></i> Today
+                                </span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon messages">
+                                <i class="las la-envelope-open"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalMessages">0</h3>
+                                <p>Messages</p>
+                                <span class="stat-change" id="unreadMessages">0 unread</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon projects">
+                                <i class="las la-project-diagram"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalProjects">6</h3>
+                                <p>Projects</p>
+                                <span class="stat-change">In portfolio</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon services">
+                                <i class="las la-concierge-bell"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalServices">6</h3>
+                                <p>Services</p>
+                                <span class="stat-change">Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-row">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Visitor Analytics</h3>
+                                <select id="visitorPeriod" class="chart-select">
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="year">This Year</option>
+                                </select>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="visitorChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card small">
+                            <div class="chart-header">
+                                <h3>Traffic Sources</h3>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="trafficChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity & Messages -->
+                    <div class="dashboard-row">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3><i class="las la-history"></i> Recent Activity</h3>
+                                <a href="#" class="view-all" data-section="visitors">View All</a>
+                            </div>
+                            <div class="activity-list" id="recentActivity">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3><i class="las la-envelope"></i> Recent Messages</h3>
+                                <a href="#" class="view-all" data-section="messages">View All</a>
+                            </div>
+                            <div class="messages-preview" id="recentMessages">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== VISITORS SECTION ==================== -->
+                <section id="visitors-section" class="section">
+                    <div class="section-header">
+                        <h2>Visitor Tracking</h2>
+                        <div class="section-actions">
+                            <button class="btn btn-secondary" id="exportVisitors">
+                                <i class="las la-download"></i> Export
+                            </button>
+                            <button class="btn btn-danger" id="clearVisitors">
+                                <i class="las la-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="visitors-stats">
+                        <div class="mini-stat">
+                            <i class="las la-globe"></i>
+                            <div>
+                                <h4 id="uniqueVisitors">0</h4>
+                                <p>Unique Visitors</p>
+                            </div>
+                        </div>
+                        <div class="mini-stat">
+                            <i class="las la-clock"></i>
+                            <div>
+                                <h4 id="todayVisitors">0</h4>
+                                <p>Today's Visits</p>
+                            </div>
+                        </div>
+                        <div class="mini-stat">
+                            <i class="las la-map-marker"></i>
+                            <div>
+                                <h4 id="countriesCount">0</h4>
+                                <p>Countries</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="data-table-wrapper">
+                        <table class="data-table" id="visitorsTable">
+                            <thead>
+                                <tr>
+                                    <th>IP Address</th>
+                                    <th>Location</th>
+                                    <th>Device</th>
+                                    <th>Browser</th>
+                                    <th>Page</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="visitorsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ==================== MESSAGES SECTION ==================== -->
+                <section id="messages-section" class="section">
+                    <div class="section-header">
+                        <h2>Contact Messages</h2>
+                        <div class="section-actions">
+                            <button class="btn btn-secondary" id="markAllRead">
+                                <i class="las la-check-double"></i> Mark All Read
+                            </button>
+                            <button class="btn btn-danger" id="clearMessages">
+                                <i class="las la-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="messages-container">
+                        <div class="messages-list" id="messagesList">
+                            <!-- Populated by JS -->
+                        </div>
+                        <div class="message-detail" id="messageDetail">
+                            <div class="no-message-selected">
+                                <i class="las la-envelope-open-text"></i>
+                                <p>Select a message to view</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== HERO SECTION MANAGEMENT ==================== -->
+                <section id="hero-section" class="section">
+                    <div class="section-header">
+                        <h2>Hero Section</h2>
+                        <button class="btn btn-primary" id="saveHero">
+                            <i class="las la-save"></i> Save Changes
+                        </button>
+                    </div>
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label>Profile Picture</label>
+                            <div class="image-upload-wrapper">
+                                <div class="current-image">
+                                    <img src="img/tari about image.png" alt="Profile" id="heroImagePreview">
+                                </div>
+                                <div class="upload-controls">
+                                    <input type="text" class="form-control" id="heroImageUrl" placeholder="Enter image URL or path (e.g., img/your-photo.png)">
+                                    <small class="form-text">Upload your image to the img/ folder and enter the path above</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Name</label>
+                            <input type="text" class="form-control" id="heroName" value="Tari Pereowei">
+                        </div>
+                        <div class="form-group">
+                            <label>Hero Title</label>
+                            <input type="text" class="form-control" id="heroTitle" value="Hello, I'm">
+                        </div>
+                        <div class="form-group">
+                            <label>Hero Description</label>
+                            <textarea class="form-control" id="heroDescription" rows="3">A Full Stack Developer from Bayelsa State, Nigeria. Building beautiful and functional web solutions.</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Typewriter Texts (one per line)</label>
+                            <textarea class="form-control" id="heroTypewriter" rows="4">Web Developer
+Blockchain Developer
+Full Stack Developer
+Frontend Engineer</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Availability Status</label>
+                            <select class="form-control" id="heroAvailability">
+                                <option value="available">Available for Work</option>
+                                <option value="busy">Currently Busy</option>
+                                <option value="unavailable">Not Available</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== ABOUT SECTION MANAGEMENT ==================== -->
+                <section id="about-section" class="section">
+                    <div class="section-header">
+                        <h2>About Me</h2>
+                        <button class="btn btn-primary" id="saveAbout">
+                            <i class="las la-save"></i> Save Changes
+                        </button>
+                    </div>
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label>About Section Image</label>
+                            <div class="image-upload-wrapper">
+                                <div class="current-image">
+                                    <img src="img/tari about image.png" alt="About" id="aboutImagePreview">
+                                </div>
+                                <div class="upload-controls">
+                                    <input type="text" class="form-control" id="aboutImageUrl" placeholder="Enter image URL or path (e.g., img/your-photo.png)">
+                                    <small class="form-text">Upload your image to the img/ folder and enter the path above</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" class="form-control" id="aboutFullName" value="Tari Godsproperty Pereowei">
+                            </div>
+                            <div class="form-group">
+                                <label>Specialty</label>
+                                <input type="text" class="form-control" id="aboutSpecialty" value="Full Stack & Blockchain Dev">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" class="form-control" id="aboutLocation" value="Bayelsa State, Nigeria">
+                            </div>
+                            <div class="form-group">
+                                <label>Focus</label>
+                                <input type="text" class="form-control" id="aboutFocus" value="Web3 & Smart Contracts">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>About Paragraph 1</label>
+                            <textarea class="form-control" id="aboutPara1" rows="3">I'm Tari—a creative problem-solver and tech enthusiast who transforms ideas into elegant digital experiences. I blend analytical thinking with artistic vision to build web solutions that truly make an impact.</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>About Paragraph 2</label>
+                            <textarea class="form-control" id="aboutPara2" rows="3">I'm passionate about clean code, modern design, and the exciting possibilities of blockchain technology. Every project I take on reflects my commitment to excellence and attention to detail.</textarea>
+                        </div>
+                        
+                        <h3 class="form-section-title">Statistics</h3>
+                        <div class="form-row four-cols">
+                            <div class="form-group">
+                                <label>Happy Clients</label>
+                                <input type="number" class="form-control" id="statClients" value="19">
+                            </div>
+                            <div class="form-group">
+                                <label>Projects Completed</label>
+                                <input type="number" class="form-control" id="statProjects" value="30">
+                            </div>
+                            <div class="form-group">
+                                <label>Awards Received</label>
+                                <input type="number" class="form-control" id="statAwards" value="2">
+                            </div>
+                            <div class="form-group">
+                                <label>Completed Jobs</label>
+                                <input type="number" class="form-control" id="statJobs" value="28">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SERVICES SECTION MANAGEMENT ==================== -->
+                <section id="services-section" class="section">
+                    <div class="section-header">
+                        <h2>Services</h2>
+                        <button class="btn btn-primary" id="addService">
+                            <i class="las la-plus"></i> Add Service
+                        </button>
+                    </div>
+                    <div class="items-grid" id="servicesGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ==================== PORTFOLIO SECTION MANAGEMENT ==================== -->
+                <section id="portfolio-section" class="section">
+                    <div class="section-header">
+                        <h2>Portfolio Projects</h2>
+                        <button class="btn btn-primary" id="addProject">
+                            <i class="las la-plus"></i> Add Project
+                        </button>
+                    </div>
+                    <div class="items-grid" id="portfolioGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ==================== BLOG SECTION MANAGEMENT ==================== -->
+                <section id="blog-section" class="section">
+                    <div class="section-header">
+                        <h2>Blog Posts</h2>
+                        <button class="btn btn-primary" id="addBlog">
+                            <i class="las la-plus"></i> Add Post
+                        </button>
+                    </div>
+                    <div class="items-grid" id="blogGrid">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ==================== SKILLS SECTION MANAGEMENT ==================== -->
+                <section id="skills-section" class="section">
+                    <div class="section-header">
+                        <h2>Technical Skills</h2>
+                        <button class="btn btn-primary" id="addSkill">
+                            <i class="las la-plus"></i> Add Skill
+                        </button>
+                    </div>
+                    <div class="skills-manager" id="skillsManager">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- ==================== CONTACT INFO MANAGEMENT ==================== -->
+                <section id="contact-info-section" class="section">
+                    <div class="section-header">
+                        <h2>Contact Information</h2>
+                        <button class="btn btn-primary" id="saveContact">
+                            <i class="las la-save"></i> Save Changes
+                        </button>
+                    </div>
+                    <div class="form-card">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" class="form-control" id="contactPhone" value="+234 704 645 7549">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" class="form-control" id="contactEmail" value="taripereowei@gmail.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Office Location</label>
+                                <input type="text" class="form-control" id="contactLocation" value="Yenagoa, Bayelsa State">
+                            </div>
+                            <div class="form-group">
+                                <label>Country</label>
+                                <input type="text" class="form-control" id="contactCountry" value="Nigeria">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Website URL</label>
+                            <input type="url" class="form-control" id="contactWebsite" value="https://tarispace.com">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SOCIAL LINKS MANAGEMENT ==================== -->
+                <section id="social-links-section" class="section">
+                    <div class="section-header">
+                        <h2>Social Media Links</h2>
+                        <button class="btn btn-primary" id="saveSocial">
+                            <i class="las la-save"></i> Save Changes
+                        </button>
+                    </div>
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label><i class="lab la-facebook"></i> Facebook</label>
+                            <input type="url" class="form-control" id="socialFacebook" value="https://facebook.com/tarilove">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="lab la-twitter"></i> Twitter</label>
+                            <input type="url" class="form-control" id="socialTwitter" value="https://twitter.com/tarilove19">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="lab la-whatsapp"></i> WhatsApp</label>
+                            <input type="tel" class="form-control" id="socialWhatsapp" value="+2347046457549">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="lab la-github"></i> GitHub</label>
+                            <input type="url" class="form-control" id="socialGithub" value="https://github.com/tarispace">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="lab la-linkedin"></i> LinkedIn</label>
+                            <input type="url" class="form-control" id="socialLinkedin" value="">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== SETTINGS SECTION ==================== -->
+                <section id="settings-section" class="section">
+                    <div class="section-header">
+                        <h2>Settings</h2>
+                    </div>
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3><i class="las la-user-shield"></i> Account Security</h3>
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" class="form-control" id="currentPassword">
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" class="form-control" id="newPassword">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmPassword">
+                            </div>
+                            <button class="btn btn-primary" id="changePassword">
+                                <i class="las la-key"></i> Change Password
+                            </button>
+                        </div>
+                        <div class="settings-card">
+                            <h3><i class="las la-bell"></i> Notifications</h3>
+                            <div class="toggle-group">
+                                <label class="toggle-label">
+                                    <span>New visitor notifications</span>
+                                    <input type="checkbox" id="notifyVisitors" checked>
+                                    <span class="toggle-switch"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-group">
+                                <label class="toggle-label">
+                                    <span>New message notifications</span>
+                                    <input type="checkbox" id="notifyMessages" checked>
+                                    <span class="toggle-switch"></span>
+                                </label>
+                            </div>
+                            <div class="toggle-group">
+                                <label class="toggle-label">
+                                    <span>Sound notifications</span>
+                                    <input type="checkbox" id="notifySound" checked>
+                                    <span class="toggle-switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-card">
+                            <h3><i class="las la-database"></i> Data Management</h3>
+                            <button class="btn btn-secondary" id="exportData">
+                                <i class="las la-download"></i> Export All Data
+                            </button>
+                            <button class="btn btn-secondary" id="importData">
+                                <i class="las la-upload"></i> Import Data
+                            </button>
+                            <button class="btn btn-danger" id="clearAllData">
+                                <i class="las la-trash"></i> Clear All Data
+                            </button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Service Modal -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="serviceModalTitle">Add Service</h3>
+                <button class="modal-close" data-modal="serviceModal">&times;</button>
+            </div>
+            <form id="serviceForm">
+                <input type="hidden" id="serviceId">
+                <div class="form-group">
+                    <label>Service Title</label>
+                    <input type="text" class="form-control" id="serviceTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" id="serviceDesc" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Icon (Line Awesome class)</label>
+                    <input type="text" class="form-control" id="serviceIcon" placeholder="e.g., la-code" required>
+                </div>
+                <div class="form-group">
+                    <label>Feature Tags (comma separated)</label>
+                    <input type="text" class="form-control" id="serviceTags" placeholder="e.g., React, Vue, Performance">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-modal="serviceModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Service</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="projectModalTitle">Add Project</h3>
+                <button class="modal-close" data-modal="projectModal">&times;</button>
+            </div>
+            <form id="projectForm">
+                <input type="hidden" id="projectId">
+                <div class="form-group">
+                    <label>Project Title</label>
+                    <input type="text" class="form-control" id="projectTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <textarea class="form-control" id="projectDesc" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Full Description</label>
+                    <textarea class="form-control" id="projectFullDesc" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-control" id="projectCategory" required>
+                            <option value="web">Web Apps</option>
+                            <option value="blockchain">Blockchain</option>
+                            <option value="design">Design</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Project Link</label>
+                        <input type="url" class="form-control" id="projectLink" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Technologies (comma separated)</label>
+                    <input type="text" class="form-control" id="projectTags" placeholder="e.g., React, Node.js, MongoDB">
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="text" class="form-control" id="projectImage" placeholder="img/portfolio/...">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-modal="projectModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Blog Modal -->
+    <div class="modal" id="blogModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="blogModalTitle">Add Blog Post</h3>
+                <button class="modal-close" data-modal="blogModal">&times;</button>
+            </div>
+            <form id="blogForm">
+                <input type="hidden" id="blogId">
+                <div class="form-group">
+                    <label>Post Title</label>
+                    <input type="text" class="form-control" id="blogTitle" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input type="text" class="form-control" id="blogAuthor" value="Tari Pereowei">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" class="form-control" id="blogCategory" placeholder="e.g., React, TypeScript">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Excerpt</label>
+                    <textarea class="form-control" id="blogExcerpt" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>External Link (optional)</label>
+                    <input type="url" class="form-control" id="blogLink" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" class="form-control" id="blogTags" placeholder="e.g., React, TypeScript, Best Practices">
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="text" class="form-control" id="blogImage" placeholder="img/blog/...">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-modal="blogModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Skill Modal -->
+    <div class="modal" id="skillModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="skillModalTitle">Add Skill</h3>
+                <button class="modal-close" data-modal="skillModal">&times;</button>
+            </div>
+            <form id="skillForm">
+                <input type="hidden" id="skillId">
+                <div class="form-group">
+                    <label>Skill Name</label>
+                    <input type="text" class="form-control" id="skillName" required>
+                </div>
+                <div class="form-group">
+                    <label>Proficiency Level: <span id="skillLevelDisplay">50%</span></label>
+                    <input type="range" class="form-range" id="skillLevel" min="0" max="100" value="50">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-modal="skillModal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Skill</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Notification Panel -->
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h4>Notifications</h4>
+            <button class="clear-notifications" id="clearNotifications">Clear All</button>
+        </div>
+        <div class="notification-list" id="notificationList">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>
